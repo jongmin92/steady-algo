@@ -1,38 +1,99 @@
+// dfs
 #include <iostream>
+#include <algorithm>
+
+#define MAX_SIZE 16
+
 using namespace std;
 
+int day[MAX_SIZE];
+int pay[MAX_SIZE];
 int n;
-int day[16];
-int pay[16];
 
-int sum;
+int sum = 0;
 
-bool cal(int now, int money) {
-    if (now == n+1) {
-        sum = max(sum, money);
-        return false;
+void go(int d, int s) {
+    if (d == n + 1) {
+        sum = max(sum, s);
+        return;
     }
     
-    if (now + day[now] <= n+1) {
-        cal(now + day[now], money + pay[now]);
+    if (d + day[d] <= n + 1) {
+        go(d + day[d], s + pay[d]);
     }
-    
-    if (now+1 <= n+1) {
-        cal(now+1, money);
+    if (d + 1 <= n + 1) {
+        go(d + 1, s);
     }
-    
-    return true;
 }
 
 int main(void) {
     cin >> n;
     
-    for (int i=1; i<n+1; i++) {
+    for (int i = 1; i <= n; i++) {
         cin >> day[i] >> pay[i];
     }
+   
+    //std::chrono::system_clock::time_point StartTime = std::chrono::system_clock::now();
+
+    go(1, 0);
     
-    cal(1, 0);
-    cout << sum << "\n";
+    cout << sum << '\n';
+
+//    std::chrono::system_clock::time_point EndTime = std::chrono::system_clock::now();
+//    std::chrono::nanoseconds nano = EndTime - StartTime;
+//    std::cout << "Test() 함수를 수행하는 걸린 시간: " << nano.count()  << endl;
     
     return 0;
 }
+ 
+
+/*
+// dp
+#include <iostream>
+#include <algorithm>
+#include <chrono>
+
+#define MAX_SIZE 16
+
+using namespace std;
+
+int day[MAX_SIZE];
+int pay[MAX_SIZE];
+int dp[MAX_SIZE];
+
+int main() {
+    int n;
+    cin >> n;
+    
+    for (int i = 1; i <= n; i++) {
+        cin >> day[i] >> pay[i];
+    }
+    
+    int sum = 0;
+    
+//    std::chrono::system_clock::time_point StartTime = std::chrono::system_clock::now();
+ 
+    
+    for (int i = 1; i <= n; i++) {
+        int next1 = i + day[i];
+        int next2 = i + 1;
+        
+        if (next1 <= n + 1) {
+            dp[next1] = max(dp[next1], dp[i] + pay[i]);
+        }
+        if (next2 <= n + 1) {
+            dp[next2] = max(dp[next2], dp[i]);
+        }
+        
+        sum = max(max(sum, dp[next1]), dp[next2]);
+    }
+    
+    cout << sum << '\n';
+
+//    std::chrono::system_clock::time_point EndTime = std::chrono::system_clock::now();
+//    std::chrono::nanoseconds nano = EndTime - StartTime;
+//    std::cout << "Test() 함수를 수행하는 걸린 시간: " << nano.count()  << endl;
+    
+    return 0;
+}
+*/
