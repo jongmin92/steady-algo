@@ -1,1 +1,6 @@
-algo.xcodeproj
+.*
+Debug/
+x64/
+algo.vcxproj
+algo.vcxproj.filters
+algo.vcxproj.user
